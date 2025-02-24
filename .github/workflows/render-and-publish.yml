@@ -25,26 +25,27 @@ jobs:
           echo "io_url=$(gh api "repos/$GITHUB_REPOSITORY/pages" --jq '.html_url')" >> "$GITHUB_ENV"
 
       - name: Edit quarto.yml with correct repo name and github.io site
-        if: ${{ github.event.repository.fork }}
         id: change-repo-name
         env: 
           SITE: ${{ env.site }}
           URL: ${{ env.io_url }}
         run: |
           quarto_yml <- readLines("_quarto.yml", encoding = "UTF-8")
+          quarto_yml[7]
           if(!Sys.getenv('SITE') %in% quarto_yml[7]){
             quarto_yml[7] <- gsub("https://.*", Sys.getenv('URL'), quarto_yml[7])
             quarto_yml[8] <- gsub("https://.*", paste0("https://github.com/", Sys.getenv('SITE')), quarto_yml[8])
             cat('io_changed=', 'TRUE', sep='', file=Sys.getenv('GITHUB_OUTPUT'), append=TRUE)
             }
         shell: Rscript {0}
-
+       # if: ${{ github.event.repository.fork }}
+       
       - name: Commit changes to _quarto.yml
         uses: EndBug/add-and-commit@v9
-        if: ${{ steps.change-repo-name.outputs.io_changed }}
         with: 
           add: './_quarto.yml'
           message: 'update _quarto.yml with site and github.io name'
+        #if: ${{ steps.change-repo-name.outputs.io_changed }}
 
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
