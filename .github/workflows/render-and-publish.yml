@@ -31,8 +31,8 @@ jobs:
           URL: ${{ env.io_url }}
         run: |
           quarto_yml <- readLines("_quarto.yml", encoding = "UTF-8")
-          quarto_yml[7]
-          if(grepl(Sys.getenv('SITE'), quarto_yml[7]) == FALSE){
+          grepl(Sys.getenv('URL'), quarto_yml[7])
+          if(grepl(Sys.getenv('URL'), quarto_yml[7]) == FALSE){
             quarto_yml[7] <- gsub("https://.*", Sys.getenv('URL'), quarto_yml[7])
             quarto_yml[8] <- gsub("https://.*", paste0("https://github.com/", Sys.getenv('SITE')), quarto_yml[8])
             cat('io_changed=', 'TRUE', sep='', file=Sys.getenv('GITHUB_OUTPUT'), append=TRUE)
