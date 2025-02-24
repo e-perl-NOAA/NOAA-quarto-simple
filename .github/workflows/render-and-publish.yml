@@ -1,5 +1,8 @@
 on:
+  create:
   push:
+  fork:
+  workflow_dispatch:
 
 name: Render and Publish
 
@@ -22,6 +25,7 @@ jobs:
           echo "io_url=$(gh api "repos/$GITHUB_REPOSITORY/pages" --jq '.html_url')" >> "$GITHUB_ENV"
 
       - name: Edit quarto.yml with correct site
+        if: ${{ github.event.repository.fork }}
         id: change-repo-name
         env: 
           SITE: ${{ env.site }}
