@@ -9,13 +9,39 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
-        uses: actions/checkout@v2 
+        uses: actions/checkout@v4
         
       - name: Set up R (needed for Rmd)
         uses: r-lib/actions/setup-r@v2
 
       - name: Install packages (needed for Rmd)
         run: Rscript -e 'install.packages(c("rmarkdown", "knitr", "jsonlite"))'
+
+      - name: get repo name and github.io name
+        run: |
+          echo "site=${{ github.repository }}" >> "$GITHUB_ENV"
+          echo "io_url=$(gh api "repos/$GITHUB_REPOSITORY/pages" --jq '.html_url')" >> "$GITHUB_ENV"
+
+      - name: Edit quarto.yml with correct site
+        id: change-repo-name
+        env: 
+          SITE: ${{ env.site }}
+          URL: ${{ env.io_url }}
+        run: |
+          quarto_yml <- readLines("_quarto.yml", encoding = "UTF-8")
+          if(!Sys.getenv('SITE')) %in% quarto_yml[7]){
+            quarto_yml[7] <- gsub("https://.*", Sys.getenv('URL'), quarto_yml[7])
+            quarto_yml[8] <- gsub("https://.*", paste0("https://github.com/", Sys.getenv('SITE')), quarto_yml[8])
+            cat('io_changed=', 'TRUE', sep='', file=Sys.getenv('GITHUB_OUTPUT'), append=TRUE)
+            }
+        shell: Rscript {0}
+
+      - name: Commit changes to _quarto.yml
+        uses: EndBug/add-and-commit@v9
+        if: ${{ steps.change-repo-name.outputs.io_changed }}
+        with: 
+          add: './_quarto.yml'
+          message: 'update _quarto.yml with site and github.io name'
 
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
