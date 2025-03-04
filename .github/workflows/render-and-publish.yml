@@ -36,10 +36,11 @@ jobs:
           quarto_yml <- readLines("_quarto.yml", encoding = "UTF-8")
           quarto_yml[7] <- gsub("https://.*", paste0(Sys.getenv('PAGES_URL'), '"'), quarto_yml[7])
           quarto_yml[8] <- gsub("https://.*", paste0(Sys.getenv('REPO_URL'), '"'), quarto_yml[8])
-          quarto_yml[24] <- gsub("href: .*", paste0('href:', Sys.getenv('PAGES_URL')), quarto_yml[24])
-          quarto_yml[25] <- gsub('text: .*', 'text: "Link to Website"', quarto_yml[25])
-          quarto_yml[27] <- gsub("href: .*", paste0('href:', Sys.getenv('REPO_URL')), quarto_yml[27])
-          quarto_yml[28] <- gsub('text: .*', 'text: "Link to GitHub"', quarto_yml[28])
+          quarto_yml[24] <- gsub("href:.*", paste0('href:', Sys.getenv('PAGES_URL')), quarto_yml[24])
+          quarto_yml[25] <- gsub("text:.*", 'text: "Link to Website"', quarto_yml[25])
+          quarto_yml[27] <- gsub("href:.*", paste0('href:', Sys.getenv('REPO_URL')), quarto_yml[27])
+          quarto_yml[28] <- gsub("text:.*", 'text: "Link to GitHub"', quarto_yml[28])
+          quarto_yml
           writeLines(quarto_yml, "_quarto.yml")
         shell: Rscript {0}
        
