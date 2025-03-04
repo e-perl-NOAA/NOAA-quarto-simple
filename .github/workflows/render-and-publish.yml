@@ -23,7 +23,7 @@ jobs:
         run: |
           echo "site=${{ github.repository }}" >> $GITHUB_ENV
           echo "io_url=https://${{ github.repository_owner }}.github.io/${{ github.repository }}" >> $GITHUB_ENV
-          echo "$io_url"
+          echo ${{ env.io_url}}
           
 
       - name: Edit quarto.yml with correct repo name and github.io site
@@ -32,7 +32,6 @@ jobs:
           SITE: ${{ env.site }}
           URL: ${{ env.io_url }}
         run: |
-          Sys.getenv('URL')
           quarto_yml <- readLines("_quarto.yml", encoding = "UTF-8")
           quarto_yml[7] <- gsub("https://.*", paste0(Sys.getenv('URL'), '"'), quarto_yml[7])
           quarto_yml[7]
