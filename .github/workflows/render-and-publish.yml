@@ -21,9 +21,10 @@ jobs:
 
       - name: get repo name and github.io name
         run: |
-          echo "site=${{ github.repository }}" >> "$GITHUB_ENV"
-          echo "io_url=$(gh api "repos/$GITHUB_REPOSITORY/pages" --jq '.html_url')" >> "$GITHUB_ENV"
-          echo "io_url=$(gh api "repos/$GITHUB_REPOSITORY/pages" --jq '.html_url')"
+          echo "site=${{ github.repository }}" >> $GITHUB_ENV
+          echo "io_url=https://${{ github.repository_owner }}.github.io/${{ github.repository }}" >> $GITHUB_ENV
+          echo "$io_url"
+          
 
       - name: Edit quarto.yml with correct repo name and github.io site
         id: change-repo-name
