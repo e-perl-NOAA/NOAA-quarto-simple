@@ -35,7 +35,7 @@ jobs:
           quarto_yml[7] <- gsub("https://.*", paste0(Sys.getenv('PAGES_URL'), '"'), quarto_yml[7])
           "https://e-perl-NOAA.github.io/NOAA-quarto-simple/"
           quarto_yml[7]
-          quarto_yml[8] <- gsub("https://.*", paste0('https://github.com/', Sys.getenv('REPO_URL'), '"'), quarto_yml[8])
+          quarto_yml[8] <- gsub("https://.*", paste0(Sys.getenv('REPO_URL'), '"'), quarto_yml[8])
           quarto_yml[8]
           writeLines(quarto_yml, "_quarto.yml")
           cat('io_changed=', 'TRUE', sep='', file=Sys.getenv('GITHUB_OUTPUT'), append=TRUE)
