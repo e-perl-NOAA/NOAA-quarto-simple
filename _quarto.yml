@@ -21,10 +21,10 @@ website:
     align: center
     tools: 
       - icon: globe
-        https://e-perl-NOAA.github.io/NOAA-quarto-simple/"
+        https://e-perl-NOAA.github.io/NOAA-quarto-simple/
         "Link to Website"
       - icon: github
-        https://github.com/e-perl-NOAA/NOAA-quarto-simple"
+        https://github.com/e-perl-NOAA/NOAA-quarto-simple
         "Link to GitHub"
 
     style: "docked"
