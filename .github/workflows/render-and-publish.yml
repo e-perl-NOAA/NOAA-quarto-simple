@@ -6,10 +6,19 @@ on:
 
 name: Render and Publish
 
+env:
+  PAGES_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/
+  REPOSITORY_URL: https://github.com/${{ github.repository_owner }}/${{ github.repository }}
+
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: get repo name and github.io name
+        run: |
+          echo "${{ env.PAGES_URL }}"
+          echo "${{ env.REPO_URL }}"
+          
       - name: Check out repository
         uses: actions/checkout@v4
         
@@ -18,24 +27,14 @@ jobs:
 
       - name: Install packages (needed for Rmd)
         run: Rscript -e 'install.packages(c("rmarkdown", "knitr", "jsonlite"))'
-
-      - name: get repo name and github.io name
-        run: |
-          echo "site=${{ github.repository }}" >> $GITHUB_ENV
-          echo "io_url=https://${{ github.repository_owner }}.github.io/${{ github.repository }}" >> $GITHUB_ENV
-          echo ${{ env.io_url }}
           
-
       - name: Edit quarto.yml with correct repo name and github.io site
         id: change-repo-name
-        env: 
-          SITE: ${{ env.site }}
-          URL: ${{ env.io_url }}
         run: |
           quarto_yml <- readLines("_quarto.yml", encoding = "UTF-8")
-          quarto_yml[7] <- gsub("https://.*", paste0(Sys.getenv('URL'), '"'), quarto_yml[7])
+          quarto_yml[7] <- gsub("https://.*", paste0(Sys.getenv('PAGES_URL'), '"'), quarto_yml[7])
           quarto_yml[7]
-          quarto_yml[8] <- gsub("https://.*", paste0('https://github.com/', Sys.getenv('SITE'), '"'), quarto_yml[8])
+          quarto_yml[8] <- gsub("https://.*", paste0('https://github.com/', Sys.getenv('REPO_URL'), '"'), quarto_yml[8])
           quarto_yml[8]
           writeLines(quarto_yml, "_quarto.yml")
           cat('io_changed=', 'TRUE', sep='', file=Sys.getenv('GITHUB_OUTPUT'), append=TRUE)
