@@ -4,7 +4,7 @@ project:
 website: 
   page-navigation: true
   title: "NOAA quarto simple" 
-  site-url: "
+  site-url: "https://e-perl-NOAA.github.io
   repo-url: "https://github.com/"
   repo-actions: [edit, source, issue]
   favicon: images/favicon.ico
