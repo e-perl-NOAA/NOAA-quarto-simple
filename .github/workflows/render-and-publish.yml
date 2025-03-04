@@ -33,7 +33,7 @@ jobs:
         run: Rscript -e 'install.packages(c("rmarkdown", "knitr", "jsonlite"))'
           
       - name: Edit quarto.yml with correct repo name and github.io site
-        if: ${{ github.event.forkee }}
+        if: ${{ github.event.forkee }} || ${{ github.event.action == 'created' }}
         id: change-repo-name
         run: |
           quarto_yml <- readLines("_quarto.yml", encoding = "UTF-8")
@@ -46,7 +46,7 @@ jobs:
         shell: Rscript {0}
        
       - name: Commit changes to _quarto.yml
-        if: ${{ github.event.forkee }}
+        if: ${{ github.event.forkee }} || ${{ github.event.action == 'created' }}
         uses: EndBug/add-and-commit@v9
         with: 
           add: './_quarto.yml'
