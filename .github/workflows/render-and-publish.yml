@@ -23,7 +23,7 @@ jobs:
         run: |
           echo "site=${{ github.repository }}" >> $GITHUB_ENV
           echo "io_url=https://${{ github.repository_owner }}.github.io/${{ github.repository }}" >> $GITHUB_ENV
-          echo ${{ env.io_url}}
+          echo ${{ env.io_url }}
           
 
       - name: Edit quarto.yml with correct repo name and github.io site
